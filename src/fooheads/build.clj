@@ -47,13 +47,17 @@
 
 (defn deploy
   [_]
-  (let [{lib-name :name} (lib-data)]
+  (let [{lib-name :name
+         version :version
+         repository :repository} (lib-data)
+        jar-file-name (jar-file-name lib-name version)]
     (jar nil)
 
     (dd/deploy {:installer :remote
                 :artifact jar-file-name
                 :pom-file (b/pom-path {:lib lib-name
-                                       :class-dir jar-content})})))
+                                       :class-dir jar-content})
+                :repository {"releases" {:url repository}}})))
 
 
 (comment
